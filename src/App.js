@@ -1,24 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './Header';
+import ProductList from './ProductList';
+import CartList from './CartList';
+import { useState } from 'react';
+import {CartProvider} from './CartContext';
 
 function App() {
+
+  
+
+  const [cart, setCart] = useState([])
+  const [showCart, setShowCart] = useState(false)
+
+  const addToCart = (data) => {
+    setCart([...cart, { ...data, quantity: 1 }])
+  }
+
+  const handleShow = (value) => {
+    setShowCart(value)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <CartProvider>
+    <div>
+      <Header count={cart.length}
+        handleShow={handleShow} ></Header>
+
+      {
+        showCart ?
+          <CartList cart={cart} ></CartList> :
+          <ProductList addToCart={addToCart} ></ProductList>
+      }
+
+
     </div>
+    </CartProvider>
   );
 }
 
